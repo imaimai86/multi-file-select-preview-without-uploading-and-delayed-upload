@@ -29,12 +29,10 @@ public function process_uploaded_file()
 			}
 			
 			$config['file_name'] = $target_file_name;
-			$files_info = move_uploaded_file_to_location($temp_name, $target_file_name, $config);
+			move_uploaded_file($temp_name, $config['upload_path'].$target_file_name);
+			chmod_apply($config['upload_path'].$target_file_name);
 
 			$uploaded_file_info[] = array(
-				'height' => $files_info['image_height'],
-				'width' => $files_info['image_width'],
-				'path' => $files_info['full_path'],
 				'target_name' => $target_file_name,
 				'uploaded_file_name' => $uploaded_file_name
 			);
@@ -63,29 +61,6 @@ function get_number_of_images_uploaded($image_uploader_multiple)
 	}
 
 	return $count;
-}
-
-/**
- * function to move uploaded file to specific location
- *
- * @param string $temp_name
- * @param string $target_file_name
- * @param array $config
- *
- * @return multitype:string unknown multitype:
- */
-function move_uploaded_file_to_location($temp_name, $target_file_name, $config)
-{
-	move_uploaded_file($temp_name, $config['upload_path'].$target_file_name);
-	chmod_apply($config['upload_path'].$target_file_name);
-
-	list($width, $height, $type, $attr) = getimagesize($config['upload_path'].$target_file_name);
-
-	return array(
-		'image_height' => $height,
-		'image_width' => $width,
-		'full_path' => $config['upload_path'].$target_file_name
-	);
 }
 
 /**
