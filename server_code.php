@@ -1,5 +1,39 @@
 <?php
 /**
+ * Function to save images uploaded from content tab using bulk upload
+ *
+ * @return multitype:array
+ */
+public function save_uploaded_files()
+{
+	$response = array('status' => 0, 'message' => '');
+	$posted_data = $_POST;
+	$user_name = $posted_data['username'];
+	$config['allowed_types'] = array('gif','jpg', 'jpeg', 'jpe', 'png');
+	$config['upload_path'] = getcwd().'/uploadpath/';
+
+	$values = array();
+	$originalFileName = '';
+	try {
+		$fileDetails = $this->process_uploaded_file($originalFileName, $values, $user_id);
+	} catch (Exception $e) {
+		$response['message'] = 'Something went wrong. Please try again later';
+
+		return $response;
+	}
+	$response['status'] = 1;
+	$response['message'] = 'Files saved';
+	foreach ($fileDetails as $details) {
+		$response['file_info'][] = array(
+			'original' => $details['uploaded_file_name'],
+			'target' => $details['target_name'],
+		);
+	}
+
+	return $response;
+}
+
+/**
  * Function to move uploaded file to target location
  *
  * @param string $fileName
