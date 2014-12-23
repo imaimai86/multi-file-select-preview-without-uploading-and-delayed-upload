@@ -1,6 +1,6 @@
 <?php
 /**
- * Function to save images uploaded from content tab using bulk upload
+ * Function to save images uploaded using bulk uploader
  *
  * @return multitype:array
  */
